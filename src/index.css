@@ -1,56 +1,31 @@
 @import "tailwindcss";
 @custom-variant dark (&:is(.dark *));
-@custom-variant beige (&:is(.beige *));
-@custom-variant sage (&:is(.sage *));
 
 @theme {
-  --color-brand-accent: var(--brand-accent);
-  --color-brand-dark: var(--brand-dark);
-  --color-brand-light: var(--brand-light);
+  --color-brand-accent: #D4AF37; /* Muted Gold / Beige */
+  --color-brand-dark: #1A1A1A; /* Charcoal text */
+  --color-brand-light: #F9F9F9; /* Off-white */
   
   --font-serif: "Playfair Display", serif;
   --font-sans: "Inter", sans-serif;
 }
 
 @layer base {
-  :root {
-    --brand-accent: #D4AF37;
-    --brand-dark: #1A1A1A;
-    --brand-light: #F9F9F9;
-  }
-
-  .dark {
-    --brand-dark: #F9F9F9;
-    --brand-light: #0D0D0D;
-    --brand-accent: #C5A028;
-  }
-
-  .beige {
-    --brand-dark: #433422;
-    --brand-light: #F5E6D3;
-    --brand-accent: #8B7355;
-  }
-
-  .sage {
-    --brand-dark: #2D332D;
-    --brand-light: #E8EDE8;
-    --brand-accent: #708070;
-  }
-
   html {
     scroll-behavior: smooth;
     scroll-padding-top: 100px;
-    transition: background-color 0.5s ease, color 0.5s ease;
   }
-
   body {
-    background-color: var(--brand-light);
-    color: var(--brand-dark);
+    background-color: var(--color-brand-light);
+    color: var(--color-brand-dark);
     font-family: var(--font-sans);
+  }
+  .dark body {
+    background-color: var(--color-brand-dark);
+    color: var(--color-brand-light);
   }
   
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-serif);
   }
 }
-

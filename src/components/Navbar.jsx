@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
-import { Menu, X, Palette } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Menu, X, Moon, Sun } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const Navbar = ({ currentTheme, onThemeCycle }) => {
+const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isDark, setIsDark] = useState(false);
 
   const handleScroll = (e, targetId) => {
     e.preventDefault();
@@ -18,17 +19,16 @@ const Navbar = ({ currentTheme, onThemeCycle }) => {
     }, 100);
   };
 
-  const getThemeColor = (theme) => {
-    switch(theme) {
-      case 'dark': return '#0D0D0D';
-      case 'beige': return '#F5E6D3';
-      case 'sage': return '#E8EDE8';
-      default: return '#F9F9F9';
+  useEffect(() => {
+    if (isDark) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
     }
-  };
+  }, [isDark]);
 
   return (
-    <nav className="fixed w-full z-50 transition-all duration-300 bg-brand-light/90 backdrop-blur-md border-b border-black/5 dark:border-white/5">
+    <nav className="fixed w-full z-50 transition-all duration-300 bg-brand-light/90 dark:bg-brand-dark/90 backdrop-blur-md border-b border-black/5 dark:border-white/5">
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
         <div className="flex justify-between h-24 items-center">
           {/* Logo */}
@@ -40,38 +40,28 @@ const Navbar = ({ currentTheme, onThemeCycle }) => {
 
           {/* Desktop Menu */}
           <div className="hidden md:flex space-x-8 items-center">
-            <a href="#gallery" className="text-sm tracking-wide uppercase hover:text-brand-accent transition-colors underline-offset-8 decoration-1">Gallery</a>
+            <a href="#gallery" className="text-sm tracking-wide uppercase hover:text-brand-accent transition-colors">Gallery</a>
             <a href="#about" className="text-sm tracking-wide uppercase hover:text-brand-accent transition-colors">About</a>
             <a href="#crafter" className="text-sm tracking-wide uppercase hover:text-brand-accent transition-colors">Crafter</a>
             
-            <div className="w-px h-4 bg-brand-dark/20"></div>
+            <div className="w-px h-4 bg-brand-dark/20 dark:bg-brand-light/20"></div>
             
-            {/* Theme Toggle */}
             <button 
-              onClick={onThemeCycle}
-              className="flex items-center space-x-2 group p-2 hover:opacity-70 transition-all"
-              aria-label="Cycle Theme"
+              onClick={() => setIsDark(!isDark)}
+              className="p-2 hover:text-brand-accent transition-colors"
+              aria-label="Toggle Theme"
             >
-              <div 
-                className="w-4 h-4 rounded-full border border-brand-dark/20 transition-colors duration-500"
-                style={{ backgroundColor: getThemeColor(currentTheme) }}
-              />
-              <span className="text-[10px] uppercase tracking-widest font-medium opacity-40 group-hover:opacity-100 transition-opacity">
-                {currentTheme}
-              </span>
+              {isDark ? <Sun size={18} strokeWidth={1.5} /> : <Moon size={18} strokeWidth={1.5} />}
             </button>
           </div>
 
           {/* Mobile Menu Button */}
           <div className="flex md:hidden items-center space-x-4">
             <button 
-              onClick={onThemeCycle}
-              className="p-2 flex items-center space-x-2"
+              onClick={() => setIsDark(!isDark)}
+              className="p-2 hover:text-brand-accent transition-colors"
             >
-              <div 
-                className="w-5 h-5 rounded-full border border-brand-dark/20"
-                style={{ backgroundColor: getThemeColor(currentTheme) }}
-              />
+              {isDark ? <Sun size={20} strokeWidth={1.5} /> : <Moon size={20} strokeWidth={1.5} />}
             </button>
             <button 
               onClick={() => setIsOpen(!isOpen)}
