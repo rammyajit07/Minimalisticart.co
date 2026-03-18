@@ -1,0 +1,31 @@
+@import "tailwindcss";
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --color-brand-accent: #D4AF37; /* Muted Gold / Beige */
+  --color-brand-dark: #1A1A1A; /* Charcoal text */
+  --color-brand-light: #F9F9F9; /* Off-white */
+  
+  --font-serif: "Playfair Display", serif;
+  --font-sans: "Inter", sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 100px;
+  }
+  body {
+    background-color: var(--color-brand-light);
+    color: var(--color-brand-dark);
+    font-family: var(--font-sans);
+  }
+  .dark body {
+    background-color: var(--color-brand-dark);
+    color: var(--color-brand-light);
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-serif);
+  }
+}
