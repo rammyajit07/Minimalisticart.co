@@ -1,7 +1,41 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { supabase } from '../lib/supabase';
 
 const CTA = () => {
+  const [email, setEmail] = useState('');
+  const [status, setStatus] = useState('idle'); // idle, loading, success, error
+  const [message, setMessage] = useState('');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!email) return;
+
+    setStatus('loading');
+    try {
+      const { error } = await supabase
+        .from('subscribers')
+        .insert([{ email }]);
+
+      if (error) {
+        if (error.code === '23505') {
+          setMessage('You are already subscribed!');
+        } else {
+          throw error;
+        }
+        setStatus('error');
+      } else {
+        setMessage('Thank you! You are now subscribed.');
+        setStatus('success');
+        setEmail('');
+      }
+    } catch (err) {
+      console.error('Subscription error:', err);
+      setMessage('Something went wrong. Please try again.');
+      setStatus('error');
+    }
+  };
+
   return (
     <section className="py-24 lg:py-32 bg-brand-light dark:bg-brand-dark relative overflow-hidden">
       <div className="absolute inset-0 z-0 opacity-5 dark:opacity-10 pointer-events-none">
@@ -21,23 +55,42 @@ const CTA = () => {
             Embrace the art of <br/> less is more.
           </h2>
           <p className="text-brand-dark/60 dark:text-brand-light/60 font-light max-w-xl mx-auto mb-12">
-            Join our exclusive mailing list to receive early access to new minimalist collections, artist interviews, and private viewing invitations.
+            Join our exclusive mailing list to receive early access to new minimalist collections and private viewing invitations.
           </p>
 
-          <form className="flex flex-col sm:flex-row max-w-md mx-auto relative group">
-            <input 
-              type="email" 
-              placeholder="Your email address" 
-              className="w-full bg-transparent border-b border-brand-dark/20 dark:border-brand-light/20 py-4 px-2 text-brand-dark dark:text-brand-light placeholder:text-brand-dark/40 dark:placeholder:text-brand-light/40 focus:outline-none focus:border-brand-dark dark:focus:border-brand-light transition-colors"
-              required
-            />
-            <button 
-              type="submit" 
-              className="mt-4 sm:mt-0 sm:absolute sm:right-0 sm:bottom-0 sm:h-full px-4 text-xs tracking-widest uppercase font-medium hover:text-brand-accent transition-colors"
-            >
-              Subscribe
-            </button>
-          </form>
+          <div className="max-w-md mx-auto">
+            <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row relative group mb-4">
+              <input 
+                type="email" 
+                placeholder="Your email address" 
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={status === 'loading' || status === 'success'}
+                className="w-full bg-transparent border-b border-brand-dark/20 dark:border-brand-light/20 py-4 px-2 text-brand-dark dark:text-brand-light placeholder:text-brand-dark/40 dark:placeholder:text-brand-light/40 focus:outline-none focus:border-brand-dark dark:focus:border-brand-light transition-colors disabled:opacity-50"
+                required
+              />
+              <button 
+                type="submit" 
+                disabled={status === 'loading' || status === 'success'}
+                className="mt-4 sm:mt-0 sm:absolute sm:right-0 sm:bottom-0 sm:h-full px-4 text-xs tracking-widest uppercase font-medium hover:text-brand-accent transition-colors disabled:opacity-50"
+              >
+                {status === 'loading' ? 'Joining...' : 'Subscribe'}
+              </button>
+            </form>
+
+            <AnimatePresence>
+              {(status === 'success' || status === 'error') && (
+                <motion.p
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                  className={`text-xs uppercase tracking-widest font-medium ${status === 'success' ? 'text-green-600 dark:text-green-400' : 'text-brand-accent'}`}
+                >
+                  {message}
+                </motion.p>
+              )}
+            </AnimatePresence>
+          </div>
         </motion.div>
       </div>
     </section>
