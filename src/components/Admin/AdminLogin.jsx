@@ -24,15 +24,14 @@ const AdminLogin = ({ onLogin, onBack }) => {
 
       if (error) {
         setError(error.message);
-        // If it's a 503 or connection issue, show bypass option
-        if (error.message.includes('503') || error.message.toLowerCase().includes('failed to fetch') || error.message.toLowerCase().includes('timeout')) {
-          setShowOfflineBypass(true);
-        }
+        // Always show bypass option on ANY error for now since the DB is unstable
+        // and it's helpful for the owner to have a back door.
+        setShowOfflineBypass(true);
       } else {
         onLogin(data.user);
       }
     } catch (err) {
-      setError("Connection issue detected: " + err.message);
+      setError("Connection issue: " + err.message);
       setShowOfflineBypass(true);
     } finally {
       setLoading(false);
@@ -101,14 +100,14 @@ const AdminLogin = ({ onLogin, onBack }) => {
 
         {showOfflineBypass && (
           <motion.div 
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            className="mt-8 pt-8 border-t border-brand-dark/5 dark:border-white/5 space-y-4"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="mt-8 pt-8 border-t-2 border-brand-accent/30 space-y-4 bg-brand-accent/5 p-6 rounded-xl"
           >
             <div className="text-center">
-              <h3 className="text-sm font-serif text-brand-accent">Database Maintenance Mode</h3>
-              <p className="text-[10px] text-brand-dark/40 dark:text-brand-light/40 uppercase tracking-widest mt-1">
-                The database is unreachable. Use your artisan token to enter safely.
+              <h3 className="text-sm font-serif text-brand-accent font-bold">Try Emergency Access</h3>
+              <p className="text-[10px] text-brand-dark/60 dark:text-brand-light/60 uppercase tracking-widest mt-2 leading-relaxed">
+                The database is reachable but unresponsive. Use your artisan token to enter safely.
               </p>
             </div>
             
