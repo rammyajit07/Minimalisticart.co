@@ -28,10 +28,10 @@ const Footer = ({ onAdminClick }) => {
           <div className="space-y-6 flex flex-col items-center md:items-start">
             <h4 className="text-xs uppercase tracking-widest font-medium">Connect</h4>
             <div className="flex justify-center md:justify-start space-x-4">
-              <a href="https://www.instagram.com/minimalisticart.co?igsh=MWl4azVrMzQ2aHF1eA==" target="_blank" rel="noopener noreferrer" className="p-2 border border-brand-dark/10 dark:border-brand-light/10 hover:border-brand-accent hover:text-brand-accent rounded-full transition-all">
+              <a href="https://www.instagram.com/minimalisticart.co?igsh=MWl4azVrMzQ2aHF1eA==" target="_blank" rel="noopener noreferrer" className="p-2 border border-brand-dark/10 dark:border-brand-light/10 hover:border-brand-accent hover:text-brand-accent rounded-full transition-all" aria-label="Follow us on Instagram">
                 <Instagram size={18} strokeWidth={1.5} />
               </a>
-              <a href="https://mail.google.com/mail/?view=cm&fs=1&to=prantika652@gmail.com" target="_blank" rel="noopener noreferrer" className="p-2 border border-brand-dark/10 dark:border-brand-light/10 hover:border-brand-accent hover:text-brand-accent rounded-full transition-all">
+              <a href="https://mail.google.com/mail/?view=cm&fs=1&to=prantika652@gmail.com" target="_blank" rel="noopener noreferrer" className="p-2 border border-brand-dark/10 dark:border-brand-light/10 hover:border-brand-accent hover:text-brand-accent rounded-full transition-all" aria-label="Send us an email via Gmail">
                 <Mail size={18} strokeWidth={1.5} />
               </a>
             </div>
