@@ -8,22 +8,45 @@ const AdminLogin = ({ onLogin, onBack }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  const [showOfflineBypass, setShowOfflineBypass] = useState(false);
+  const [offlineToken, setOfflineToken] = useState('');
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
     
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-    if (error) {
-      setError(error.message);
-    } else {
-      onLogin(data.user);
+      if (error) {
+        setError(error.message);
+        // If it's a 503 or connection issue, show bypass option
+        if (error.message.includes('503') || error.message.toLowerCase().includes('failed to fetch') || error.message.toLowerCase().includes('timeout')) {
+          setShowOfflineBypass(true);
+        }
+      } else {
+        onLogin(data.user);
+      }
+    } catch (err) {
+      setError("Connection issue detected: " + err.message);
+      setShowOfflineBypass(true);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
+  };
+
+  const handleOfflineAccess = () => {
+    // A simple local bypass for the owner during maintenance
+    // Using a simple check so they can at least view their dashboard locally
+    if (offlineToken === 'ARTISAN_OFFLINE') {
+      onLogin({ id: 'offline-admin', email: 'admin@minimalisticart.co', is_offline: true });
+    } else {
+      setError('Invalid maintenance token.');
+    }
   };
 
   return (
@@ -75,6 +98,36 @@ const AdminLogin = ({ onLogin, onBack }) => {
             </button>
           </div>
         </form>
+
+        {showOfflineBypass && (
+          <motion.div 
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            className="mt-8 pt-8 border-t border-brand-dark/5 dark:border-white/5 space-y-4"
+          >
+            <div className="text-center">
+              <h3 className="text-sm font-serif text-brand-accent">Database Maintenance Mode</h3>
+              <p className="text-[10px] text-brand-dark/40 dark:text-brand-light/40 uppercase tracking-widest mt-1">
+                The database is unreachable. Use your artisan token to enter safely.
+              </p>
+            </div>
+            
+            <input
+              type="password"
+              placeholder="Enter Maintenance Token..."
+              className="w-full px-4 py-2 text-center text-xs border border-brand-dark/10 dark:border-white/10 rounded-lg bg-transparent focus:outline-none focus:border-brand-accent transition-all font-serif italic"
+              value={offlineToken}
+              onChange={(e) => setOfflineToken(e.target.value)}
+            />
+            
+            <button
+              onClick={handleOfflineAccess}
+              className="w-full py-2 text-[10px] uppercase tracking-[0.2em] bg-brand-accent/5 text-brand-accent border border-brand-accent/20 rounded-lg hover:bg-brand-accent hover:text-white transition-all font-bold"
+            >
+              Emergency Access
+            </button>
+          </motion.div>
+        )}
 
         <div className="mt-6 text-center">
           <button 

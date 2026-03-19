@@ -175,6 +175,12 @@ const AdminDashboard = ({ user, onLogout }) => {
         </div>
       </nav>
 
+      {user.is_offline && (
+        <div className="bg-brand-accent text-white py-2 px-4 text-center text-[10px] uppercase tracking-[0.3em] font-bold">
+          Emergency Offline Mode — Changes will not be synced to the live database
+        </div>
+      )}
+
       <main className="max-w-7xl mx-auto px-4 sm:px-6 mt-8 sm:mt-12">
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end mb-8 space-y-6 sm:space-y-0 text-center sm:text-left">
           <div>
