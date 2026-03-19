@@ -10,21 +10,35 @@ export const StoreProvider = ({ children }) => {
   const [activeFilter, setActiveFilter] = useState('ALL');
 
   const fetchData = async () => {
-    setLoading(true);
+    // If we're already loading, don't trigger again
+    // But for initial load, we want to let it run in background
     try {
-      const [catRes, prodRes] = await Promise.all([
-        supabase.from('categories').select('*'),
-        supabase.from('products').select('*')
+      // Create a promise that rejects after 1.5 seconds
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Request timed out')), 1500)
+      );
+
+      // Race the supabase requests against the timeout
+      const [catRes, prodRes] = await Promise.race([
+        Promise.all([
+          supabase.from('categories').select('*'),
+          supabase.from('products').select('*')
+        ]),
+        timeoutPromise
       ]);
 
       if (catRes.error) throw catRes.error;
       if (prodRes.error) throw prodRes.error;
 
-      setCategories(catRes.data || []);
-      setProducts(prodRes.data || []);
+      // Update with real data if it succeeds within timeout
+      if (catRes.data) setCategories(catRes.data);
+      if (prodRes.data) setProducts(prodRes.data);
     } catch (err) {
-      console.error('Error fetching data from Supabase:', err.message);
+      console.error('Data sync failed:', err.message);
+      // We don't need to do anything else here because 
+      // the UI will just keep using the fallback/stale data
     } finally {
+      // Always set loading to false after first attempt (success or fail or timeout)
       setLoading(false);
     }
   };
