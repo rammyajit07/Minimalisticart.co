@@ -204,7 +204,7 @@ const Gallery = () => {
                 <button 
                   onClick={() => {
                     const message = encodeURIComponent(`Hi! I'm interested in purchasing the "${selectedArt.name}" (₹${selectedArt.price}). Is it available?`);
-                    window.open(`https://wa.me/916002629098?text=${message}`, '_blank');
+                    window.open(`https://wa.me/918822418703?text=${message}`, '_blank');
                   }}
                   className="w-full py-4 border border-brand-dark dark:border-brand-light uppercase text-[10px] tracking-[0.3em] font-medium hover:bg-brand-dark hover:text-brand-light dark:hover:bg-brand-light dark:hover:text-brand-dark transition-all duration-500"
                 >

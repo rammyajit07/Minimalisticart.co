@@ -31,7 +31,7 @@ const Footer = ({ onAdminClick }) => {
               <a href="https://www.instagram.com/minimalisticart.co?igsh=MWl4azVrMzQ2aHF1eA==" target="_blank" rel="noopener noreferrer" className="p-2 border border-brand-dark/10 dark:border-brand-light/10 hover:border-brand-accent hover:text-brand-accent rounded-full transition-all">
                 <Instagram size={18} strokeWidth={1.5} />
               </a>
-              <a href="mailto:contact@minimalisticart.co" className="p-2 border border-brand-dark/10 dark:border-brand-light/10 hover:border-brand-accent hover:text-brand-accent rounded-full transition-all">
+              <a href="https://mail.google.com/mail/?view=cm&fs=1&to=prantika652@gmail.com" target="_blank" rel="noopener noreferrer" className="p-2 border border-brand-dark/10 dark:border-brand-light/10 hover:border-brand-accent hover:text-brand-accent rounded-full transition-all">
                 <Mail size={18} strokeWidth={1.5} />
               </a>
             </div>
