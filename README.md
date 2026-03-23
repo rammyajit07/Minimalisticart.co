@@ -142,7 +142,3 @@ See the `screenshots/` folder for visual examples of:
 ## License
 
 This project is open source. Feel free to use and modify as needed.
-
----
-
-**Made with ❤️ by Pratham** — Celebrating minimalist design and artisan craftsmanship.
